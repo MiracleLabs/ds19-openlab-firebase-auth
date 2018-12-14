@@ -1,0 +1,93 @@
+<!-- <ion-header>
+
+  <ion-navbar  color="primary">
+    <ion-title >
+      Weather App 
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>       -->
+
+<ion-content padding class="background">
+  <!--Display only if the data is loaded -->
+  <ion-grid *ngIf="weather">
+    <ion-row>
+      <ion-col width-50 offset-25>
+        <!-- Displaying weather location -->
+        <h5 class="textColor" text-center>{{weather.display_location.full}}</h5>
+
+        <!--Displaying weather icon -->
+        <div class="icon" text-center>
+          <img src="{{weather.icon_url}}">
+        </div>
+
+        <div text-center>
+          <h1 class="textColor">{{weather.temperature_string}}</h1>
+        </div>
+        <!-- Displaying weather description -->
+        <h5 class="textColor" text-center>Clear</h5>
+
+        <!-- Displaying temperature in Farenhite-->
+        <h6 class="textColor" text-center>Last updated</h6>
+        <div class="textColor" text-center>
+          <h5>{{weather.observation_time_rfc822}}</h5>
+        </div>
+      </ion-col>
+
+    </ion-row>
+    <br>
+    <div text-center>
+      <ion-row>
+        <ion-col>
+          <strong class="textColor">Pressure</strong>
+        </ion-col>
+        <ion-col>
+          <strong class="textColor"> {{weather.pressure_in}}</strong>
+        </ion-col>
+
+      </ion-row>
+      <br>
+      <ion-row>
+        <ion-col>
+          <strong class="textColor">Humidity</strong>
+        </ion-col>
+        <ion-col>
+          <strong class="textColor"> {{weather.relative_humidity}}</strong>
+        </ion-col>
+
+      </ion-row>
+      <br>
+      <ion-row>
+        <ion-col>
+          <strong class="textColor">Wind Speed(KPH)</strong>
+        </ion-col>
+        <ion-col>
+          <strong class="textColor"> {{weather.wind_kph}}</strong>
+        </ion-col>
+
+      </ion-row>
+      <br>
+      <ion-row>
+        <ion-col>
+          <strong class="textColor">Visibility</strong>
+        </ion-col>
+        <ion-col>
+          <strong class="textColor"> {{weather.visibility_mi}}</strong>
+        </ion-col>
+
+      </ion-row>
+
+
+    </div>
+
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar color="dark">
+    <ion-title text-center> Built by
+      <strong>Miracle’s</strong>
+      <strong style="color:#00bfff;"> Innovation Labs</strong>
+    </ion-title>
+  </ion-toolbar>
+</ion-footer>  
