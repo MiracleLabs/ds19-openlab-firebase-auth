@@ -1,6 +1,6 @@
-# DS18 Open Lab | Connecting Your Ionic App to a Public API Service
+# DS18 Open Lab | Login Functionality with Ionic and Firebase Authentication
 
-The markdown file consists of commands and code snippets that will help you complete the lab - Connecting Your Ionic App to a Public API Service.
+The below file consists of commands and code snippets that will help you complete and understand the lab - Login Functionality with Ionic and Firebase Authentication.
 
 ## Commands
 
@@ -9,7 +9,7 @@ The markdown file consists of commands and code snippets that will help you comp
 ```shell
 npm install -g cordova
 ```
-### Install Ionic framework
+### Install Ionic Framework
 
 ```shell
 npm install -g ionic
@@ -18,18 +18,18 @@ npm install -g ionic
 ### Create an Ionic application
 
 ```shell
-ionic start <application-name> blank
+ionic start <your-application-name> blank
 ```
 
 ### Create a page in Ionic application
 
 ```shell
-ionic g page <page name>
+ionic g page <your-page-name>
 ```
 ### Create a provider in Ionic application
 
 ```shell
-ionic g provider <provider name>
+ionic g provider <your-provider-name>
 ```
 ### Simulate the app in browser
 
@@ -52,75 +52,103 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-import { HttpModule } from '@angular/http';
-import { MyApp } from './app.component';
 
-import { HttpClientModule } from '@angular/common/http';
-import { WeatherProvider } from '../providers/weather/weather';
-import { IonicStorageModule } from '@ionic/storage';
+import { MyApp } from './app.component';
+import { HomePage } from '../pages/home/home';
+import { Register } from '../pages/register/register';
+import { Auth } from '../providers/auth';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireModule } from 'angularfire2';
+import { SuccesPage } from '../pages/succes-page/succes-page';
+
+
+export const firebaseConfig = {
+  apiKey: "<Api Key>",
+  authDomain: "<Firebase Domain>",
+  databaseURL: "<Database URL>",
+  projectId: "<Firebase Project ID >",
+  storageBucket: "<Storage Bucket>",
+  messagingSenderId: "<Messaging Sender ID>"
+};
 
 @NgModule({
-  declarations: [   
+  declarations: [
     MyApp,
+    HomePage,
+    Register,
+    SuccesPage
   ],
-  imports: [   
+  imports: [
     BrowserModule,
-    HttpModule,
-    HttpClientModule,
-    IonicStorageModule.forRoot(),
-    IonicModule.forRoot(MyApp)
-  ],          
+    IonicModule.forRoot(MyApp),
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireDatabaseModule,
+    AngularFireAuthModule
+  ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    
+    HomePage,
+    Register,
+    SuccesPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    WeatherProvider
+    Auth,
+    {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
 export class AppModule {}
+
 ```
 
-### location.html
+### home.html
 
 ```html
 <ion-header>
-  <ion-navbar color="primary">
-    <ion-title>location</ion-title>
+  <ion-navbar color="headerColor">
+    <ion-title text-center>
+      DS'18 Firebase Authentication
+    </ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content padding>
-  <ion-grid>
-    <ion-row>
-      <ion-col width-100>
-        <ion-list>
-          <form (ngSubmit) = "saveForm()">
-            <ion-item>
-              <ion-label fixed>
-                City
-              </ion-label>
-         <ion-input [(ngModel)]="city" name="city" type="text">
-              </ion-input>
-            </ion-item>
-            <ion-item>
-                <ion-label fixed>
-                  State
-                </ion-label>
-        <ion-input [(ngModel)]="state" name="state" type="text">
-                </ion-input>
-            </ion-item>
-            <br/>
-     <button ion-button type="submit" block>Save Changes</button>
-          </form> 
-        </ion-list>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+
+<ion-content padding text-center>
+
+  <!-- DS'18 Logo    -->
+  <div >
+    <img  src="assets/imgs/ds-logo.png" >
+  </div>
+
+  <!-- Login Form  -->
+  <ion-item >
+    <ion-label floating><ion-icon name="person" ></ion-icon>  Username</ion-label>
+    <ion-input type="text"  [(ngModel)]="uname1" ></ion-input>
+  </ion-item>
+
+  <ion-item >
+    <ion-label floating>  
+      <ion-icon name="lock"></ion-icon> Password
+    </ion-label>
+       <ion-input type="password"  [(ngModel)]="pass1"></ion-input>
+  </ion-item>
+
+  <div text-center padding>
+       <button  type="submit" ion-button class="lButton" block (click)="login(uname1,pass1)">Login</button>
+  <h4 (click)="register()" class="txtNewUser">Register Here</h4>
+  <div text-center>
+    <img  src="assets/imgs/Miracle_Black.png">
+  </div>
+
+  </div>
 </ion-content>
+
+<ion-footer>
+  <h6 class="copyRight" text-center> Miracle Software Systems, Inc. 2018 </h6>    
+</ion-footer>
+
 ```
 
 ### home.scss
@@ -136,169 +164,212 @@ export class AppModule {}
 }
 
 ```
-### location.ts
+### home.ts
 
 ```javascript
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
-@IonicPage()
-@Component({
-  selector: 'page-location',
-  templateUrl: 'location.html',
-})
-export class LocationPage {
-  city:string;
-  state:string;  
+import { NavController } from 'ionic-angular';
+import { Register } from '../register/register';
+import { Auth } from '../../providers/auth';
+import { SuccesPage } from '../succes-page/succes-page';
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage) { 
-    this.storage.get('location').then((val) =>{
-      if(val != null) {
-        let location = JSON.parse(val);
-        this.city = location.city;
-        this.state = location.state;
-      } else {
-        this.city = 'visakhapatnam';
-        this.state = 'Andhra pradesh';
+@Component({
+  selector: 'page-home',
+  templateUrl: 'home.html'
+})
+export class HomePage {
+
+  constructor(public navCtrl: NavController,public auth:Auth) {
+
+  }
+  register() {
+        this.navCtrl.push(Register);    
+  }
+
+  login(uname:string,pass:string){
+
+        let credentials={
+          "email":uname,
+          "password":pass
+        }
+        this.auth.login(credentials)
+        .then((data) => {
+          console.log(data);
+          this.navCtrl.setRoot(SuccesPage);
+        });
       }
-    });
-  }
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SettingsPage');
-  }
-  saveForm(){
-    let location = {
-      city: this.city,
-      state: this.state
-    }
-    //console.log(location);
-    this.storage.set('location', JSON.stringify(location));
-    this.navCtrl.push('WeatherPage');
-  }
 }
 
 ```
 
-### weather.html
+### register.html
 
 ```html
+<!--
+  Generated template for the Register page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
 <ion-header>
-  <ion-navbar  color="primary">
+
+  <ion-navbar color="headerColor">
     <ion-title >
-      Weather App 
+      Register
     </ion-title>
   </ion-navbar>
+
 </ion-header>
-<ion-content padding style="background-color: rgb(0, 174, 255)">       
-  <!--Display only if the data is loaded -->
-  <ion-grid *ngIf = "weather">
-    <ion-row>
-      <ion-col width-50 offset-25>
-        <!-- Displaying weather location -->
-        <h2 class="location">{{weather.display_location.full}}</h2>
-        
-        <!--Displaying weather icon -->
-        <div class="icon"><img src="{{weather.icon_url}}"></div>
 
-        <!-- Displaying weather description -->
-        <h3 class="desc">{{weather.weather}}</h3>
+<ion-content padding>
+  <div text-center>
+    <img  src="assets/imgs/ds-logo.png" >  </div>
 
-        <!-- Displaying temperature in Farenhite-->
-        <h1 class="temp">{{weather.temp_f}}&deg;</h1>
-          
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col width-100>
-        <ion-list>
-          <ion-item>
-            <strong>Temperature: </strong> {{weather.temperature_string}}
-          </ion-item>
-          <ion-item>
-            <strong>Relative Humidity: </strong> {{weather.relative_humidity}}
-          </ion-item>
-          <ion-item>
-              <strong>Feels like: </strong> {{weather.feelslike_string}}
-            </ion-item>
-          <ion-item>
-            <strong>Dewpoint: </strong> {{weather.dewpoint_string}}
-          </ion-item>
-          <ion-item>
-              <strong>Visibility: </strong> {{weather.visibility_mi}}
-          </ion-item>
-          <ion-item>
-              <strong>Heat Index: </strong> {{weather.heat_index_string}}
-          </ion-item>
-        </ion-list>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <!-- Login Form  -->
+  <ion-item >
+    <ion-label floating><ion-icon name="person" ></ion-icon>  Username</ion-label>
+    <ion-input type="text" [(ngModel)]="uname" ></ion-input>
+  </ion-item>
+
+  <ion-item class="login-signup">
+    <ion-label floating>  
+      <ion-icon name="lock"></ion-icon> Password
+    </ion-label>
+       <ion-input type="password" [(ngModel)]="pass" ></ion-input>
+  </ion-item>
+
+  <div text-center padding>
+       <button  type="submit" ion-button class="lButton" (click)="register(uname,pass)" >Register Here</button>
+  </div>
+
 </ion-content>
 ```
 
-### weather.ts
+### register.ts
 
 ```javascript
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Storage } from  '@ionic/storage'
-import { WeatherProvider } from '../../providers/weather/weather'
-@IonicPage()
-@Component({
-  selector: 'page-weather',
-  templateUrl: 'weather.html',
+import { NavController, NavParams, Loading, AlertController } from 'ionic-angular';
+import { Auth } from '../../providers/auth';
+import { HomePage } from '../home/home';
+
+
+/**
+ * Generated class for the Register page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+
+ @Component({
+  selector: 'page-register',
+  templateUrl: 'register.html',
 })
-export class WeatherPage {
-  weather:any;              
-  location: {      
-    city:string,
-    state: string
-  }  
-  constructor(public navCtrl: NavController, private weatherProvider: WeatherProvider, private storage: Storage) 
-{}
-  ionViewWillEnter(){  
-    this.storage.get('location').then((val) => {
-      if(val != null) {  
-          this.location = JSON.parse(val);
-      } else {
-        this.location = {
-          city: 'Miami',
-          state: 'FL'
-        }
-      }
-      this.weatherProvider.getWeather(this.location.city, this.location.state).subscribe(
-        weather =>{
-   this.weather = weather.current_observation;
-        }
-      );
+export class Register {
+
+  loading: Loading;
+
+  regResult;
+  constructor(public navCtrl: NavController, public navParams: NavParams,public auth:Auth, public alertCtrl: AlertController){
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad Register');
+  }
+  register(uname:string,pass:string){
+    let credentials={
+      "email":uname,
+      "password":pass
+    }
+    this.auth.register(credentials).then((data) => {
+      console.log(data);
+      this.navCtrl.push(HomePage);
     });
   }
 }
 ```
 
-### WeatherProvider.ts
+### success-page.html
+
+```html
+<ion-header>
+  <ion-navbar color="headerColor">
+    <ion-title text-center>
+     Successfully Login
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <h4 text-center>Logged Succesfully</h4>
+   <div text-center padding>
+    <button  type="submit" ion-button class="lButton"  (click)="goBack()" >Go Back</button>
+  </div>
+</ion-content>
+```
+
+### success-page.ts
 
 ```javascript
-import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { NavParams, NavController } from 'ionic-angular';
+import { HomePage } from '../home/home';
+
+/**
+ * Generated class for the SuccesPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+
+@Component({
+  selector: 'page-succes-page',
+  templateUrl: 'succes-page.html',
+})
+export class SuccesPage {
+
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad SuccesPage');
+  }
+
+  goBack(){
+    this.navCtrl.push(HomePage);
+  }
+}
+```
+
+### auth.ts
+
+```javascript
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map';
+import {  FirebaseApp } from 'angularfire2';
+import * as firebase from 'firebase/app';
+
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
+
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
-export class WeatherProvider {
- 
-  apiKey = 'a8449ff9f8d33572';
-  url: string;
+export class Auth {
 
-  constructor(public http: Http) {
-    console.log('Hello ApiConsumingProvider Provider');
-    this.url = 'http://api.wunderground.com/api/'+this.apiKey+'/conditions/q';
-  }  
+  user: Observable<firebase.User>;
 
-  getWeather(city, state) {
-    return this.http.get(this.url+'/'+state+'/'+city+'.json')
-           .map(result => result.json());
+  constructor(afAuth: AngularFireAuth) {
+    this.user = afAuth.authState;    
+  }
+  
+  login(credentials: { email: string, password: string }) : Promise <any>{
+
+   return firebase.auth().signInWithEmailAndPassword(credentials.email, credentials.password);
+      }
+
+  register(credentials: { email: string, password: string }) : Promise<any> {
+       return  firebase.auth().createUserWithEmailAndPassword(credentials.email, credentials.password);
   }
 }
 ```
@@ -307,10 +378,11 @@ export class WeatherProvider {
 
 ```css
 $colors: (
-  primary:    #488aff,
-  secondary:  #32db64,
-  danger:     #f53d3d,
-  light:      #f4f4f4,
-  dark:       #222
+  primary:     #488aff,
+  secondary:   #32db64,
+  danger:      #f53d3d,
+  light:       #f4f4f4,
+  dark:        #222,
+  headerColor: #d33257
 );
 ```
