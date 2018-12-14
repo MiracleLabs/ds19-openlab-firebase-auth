@@ -1,18 +1,20 @@
-# DS18 Open Lab | Connecting Your Ionic App to a Public API Service
+# DS18 Open Lab | Login Functionality with Ionic and Firebase Authentication
 
-This repository contains the lab for creating a Hybrid Mobile App using Ionic 3 framewok, an Angular-based Mobile Framework. The app will have a simple forms that takes the location as an input and provides the weather report for the given location. This lab is brought to you by the AP Cloud Initiative and Miracle's Innovation Labs.
+This repository contains the lab for Firebase Authentication with Ionic Mobile App. It is one of the labs brought to you by Miracle's Innovation Labs.
 
-## Technology Overview
+## Technologies Overview
 
 The following are the technologies that are used in this lab. Any prior knowledge of these technologies will accelerate your pace of learning.
 
 • Visual Studio Code(IDE)
 
-• Ionic 3 Framework and Angular 2
+• Ionic Framework and Angular 2
 
 • Cordova
 
 • Node JS and NPM
+
+• Firebase Console
 
 • HTML/CSS/JavaScript
 
@@ -20,7 +22,7 @@ The following are the technologies that are used in this lab. Any prior knowledg
 
 • Download Visual Studio Code  - https://code.visualstudio.com/download
 
-• Wunderground public weather API
+• Firebase Console - https://console.firebase.google.com/
 
 ## Repository Contents
 
@@ -36,4 +38,6 @@ The repository contains detailed documentation and steps for understanding and c
 
 The following people have contributed to the development and delivery of this lab. This Lab is created and owned by the Miracle Innovation Labs Team.
 
-• Sujan Paul - Mobile Research Associate
+• Sujan Paul - NextGen Research Associate
+
+• Vijay Perambakam - Software Developer
