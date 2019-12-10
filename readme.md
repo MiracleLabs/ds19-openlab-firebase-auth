@@ -1,4 +1,4 @@
-# DS18 Open Lab | Login Functionality with Ionic and Firebase Authentication
+# DS19 Open Lab | Login Functionality with Ionic and Firebase Authentication
 
 This repository contains the lab for Firebase Authentication with Ionic Mobile App. It is one of the labs brought to you by Miracle's Innovation Labs.
 
@@ -38,6 +38,6 @@ The repository contains detailed documentation and steps for understanding and c
 
 The following people have contributed to the development and delivery of this lab. This Lab is created and owned by the Miracle Innovation Labs Team.
 
-• Sujan Paul - NextGen Research Associate
+• Pavani Moturi - NextGen Research Associate
 
-• Vijay Perambakam - Software Developer
+• Sandeepti Dommeti - NextGen Research Associate

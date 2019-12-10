@@ -1,0 +1,40 @@
+<ion-app>
+  <!-- header for the registration page -->
+  <ion-header translucent>
+    <ion-toolbar color="primary">
+      <ion-title>
+        <ion-icon routerLink="/home" name="arrow-back"></ion-icon> Register Here!!
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+<!-- main content of the registration page -->
+  <ion-content class="ion-padding">
+    <!-- Registration Form  -->
+    <form>
+      <ion-list lines="full" class="ion-no-margin ion-no-padding">
+        <ion-item>
+          <ion-label position="stacked">UserName<ion-text color="danger">*</ion-text>
+          </ion-label>
+          <ion-input required type="text" name="username" [(ngModel)]="username"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Password<ion-text color="danger">*</ion-text>
+          </ion-label>
+          <ion-input required type="password" name="password" [(ngModel)]="password"></ion-input>
+        </ion-item>
+      </ion-list>
+      <div class="ion-padding">
+        <ion-button expand="block" type="submit" class="ion-no-margin" (click)="register()"> Register</ion-button>
+      </div>
+    </form>
+  </ion-content>
+  <!-- footer contetnt of the registration page  -->
+  <ion-footer>
+    <ion-toolbar color="dark">
+      <ion-title text-center> Built by
+        <strong>Miracle’s</strong>
+        <strong style="color:#00bfff;"> Innovation Labs</strong>
+      </ion-title>
+    </ion-toolbar>
+  </ion-footer>
+</ion-app>

@@ -1,7 +1,5 @@
 {
-  "name": "weatherapp",
-  "integrations": {
-    "cordova": {}
-  },
-  "type": "ionic-angular"
+  "name": "DS19FireBaseAuth",
+  "integrations": {},
+  "type": "angular"
 }

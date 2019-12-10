@@ -1,0 +1,45 @@
+<ion-app>
+    <!-- header for the Home page -->
+  <ion-header translucent>
+    <ion-toolbar color="primary">
+      <ion-title text-center>DS'19 FireBase Authentication</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <!-- main content of the Home page -->
+  <ion-content class="ion-padding">
+    <div>
+      <img style="max-width: 27%; margin: 3px 3px 2px 118px" src="assets/imgs/DS19_logo.png">
+    </div>
+    <!-- Login Form -->
+    <form>
+      <ion-list lines="full" class="ion-no-margin ion-no-padding">
+        <ion-item>
+          <ion-label position="stacked">UserName<ion-text color="danger">*</ion-text>
+          </ion-label>
+          <ion-input required type="text" name="username" [(ngModel)]="username"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Password<ion-text color="danger">*</ion-text>
+          </ion-label>
+          <ion-input required type="password" name="password" [(ngModel)]="password"></ion-input>
+        </ion-item>
+      </ion-list>
+      <div class="ion-padding">
+        <ion-button expand="block" type="submit" style="background-color: #d33257" (click)="login()">Login</ion-button>
+      </div>
+      <h4 style=" color: #00aae7;" text-center routerLink='/register'>Register Here</h4>
+    </form>
+    <div text-center>
+      <img style="max-width: 87%;" src="assets/imgs/Miracle_Black.png">
+    </div>
+  </ion-content>
+    <!-- footer contetnt of the Home page  -->
+  <ion-footer>
+    <ion-toolbar color="dark">
+      <ion-title text-center> Built by
+        <strong>Miracle’s</strong>
+        <strong style="color:#00bfff;"> Innovation Labs</strong>
+      </ion-title>
+    </ion-toolbar>
+  </ion-footer>
+</ion-app>
