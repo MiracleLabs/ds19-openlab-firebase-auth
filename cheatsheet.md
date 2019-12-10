@@ -397,7 +397,7 @@ export class RegisterPage implements OnInit {
 
 
 ### theme/variable.scss 
-
+```
 // Ionic Variables and Theming. For more info, please see:
 // http://ionicframework.com/docs/theming/
 
