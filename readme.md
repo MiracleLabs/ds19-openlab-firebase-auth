@@ -1,6 +1,6 @@
 # DS19 Open Lab | Login Functionality with Ionic and Firebase Authentication
 
-This repository contains the lab for Firebase Authentication with Ionic Mobile App. It is one of the labs brought to you by Miracle's Innovation Labs.
+This repository contains the lab for demonstrating Login Functionality with Ionic and Firebase Authentication. It is one of the labs brought to you by Miracle's Innovation Labs.
 
 ## Technologies Overview
 
@@ -22,7 +22,7 @@ The following are the technologies that are used in this lab. Any prior knowledg
 
 • Download Visual Studio Code  - https://code.visualstudio.com/download
 
-• Firebase Console - https://console.firebase.google.com/
+• Access Firebase Console - https://console.firebase.google.com/
 
 ## Repository Contents
 
